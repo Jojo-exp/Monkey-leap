@@ -12,9 +12,9 @@ const ctx = canvas.getContext("2d");
 const W = canvas.width;
 const H = canvas.height;
 
-/** Default / cliff platform height */
-const PLATFORM_Y = 168;
-const WATER_Y = 220;
+/** Default / cliff platform height (taller canvas for phones) */
+const PLATFORM_Y = 250;
+const WATER_Y = 330;
 const CLIFF_EDGE_START = 108;
 let cliffEdge = CLIFF_EDGE_START;
 
@@ -152,10 +152,10 @@ function startRunAndJump() {
 function pickPlatformY(forceTall) {
   if (forceTall) {
     // Tall tree — banana lives up here (needs a higher hop)
-    return 128 + Math.floor(Math.random() * 8); // ~128–135
+    return 200 + Math.floor(Math.random() * 10); // ~200–209
   }
-  // Normal variety: a bit lower / same / a bit higher than cliff
-  const choices = [158, 168, 168, 178, 148, 188];
+  // Normal variety around cliff height
+  const choices = [235, 250, 250, 265, 220, 280];
   return choices[Math.floor(Math.random() * choices.length)];
 }
 
@@ -754,9 +754,11 @@ window.addEventListener("keydown", (e) => {
   if (e.code === "KeyR") setupWaitingWorld();
 });
 
-// Phone / tablet: tap = same as Space (debounce so touch + pointer don't double-fire)
+// Phone / tablet / laptop: tap or click anywhere (game or gray area) = Space
 let lastTapJump = 0;
 function onScreenJump(e) {
+  // Don't steal clicks from nothing special — whole screen is the control
+  if (e.target && e.target.closest && e.target.closest("a, button, input")) return;
   e.preventDefault();
   const now = performance.now();
   if (now - lastTapJump < 40) return;
@@ -767,6 +769,14 @@ function onScreenJump(e) {
 
 canvas.addEventListener("pointerdown", onScreenJump);
 canvas.addEventListener("touchstart", onScreenJump, { passive: false });
+
+const wrap = document.getElementById("wrap");
+if (wrap) {
+  wrap.addEventListener("pointerdown", onScreenJump);
+  wrap.addEventListener("touchstart", onScreenJump, { passive: false });
+}
+document.body.addEventListener("pointerdown", onScreenJump);
+document.body.addEventListener("touchstart", onScreenJump, { passive: false });
 
 canvas.tabIndex = 0;
 canvas.style.outline = "none";
