@@ -67,9 +67,10 @@ let trees = [];
  */
 let fish = [];
 
-const COYOTE_TIME = 0.22;
-const JUMP_QUEUE_TIME = 0.2;
-const CATCH_X = 28;
+const COYOTE_TIME = 0.32;
+const JUMP_QUEUE_TIME = 0.32;
+/** Wider catch so near-miss taps still grab the tree */
+const CATCH_X = 38;
 const BANANA_EVERY = 10;
 const BANANA_POINTS = 20;
 
@@ -95,11 +96,12 @@ function applyJumpPhysics() {
 
 /** Hop matched to distance, speed, and height change between platforms */
 function applyJumpPhysicsForHop(dist, spd, fromY, toY) {
-  const air = Math.max(0.28, dist / spd);
+  // Slightly longer airtime = a bit more reach / forgiveness
+  const air = Math.max(0.3, (dist / spd) * 1.06);
   const rise = Math.max(0, fromY - toY); // jumping UP (smaller Y)
-  const peak = Math.min(82, 34 + dist * 0.14 + rise * 0.9 + 8);
+  const peak = Math.min(88, 38 + dist * 0.15 + rise * 0.9 + 10);
   let v = (4 * peak) / air;
-  v = Math.min(430, Math.max(280, v));
+  v = Math.min(440, Math.max(285, v));
   monkey.jumpV = -v;
   monkey.grav = (2 * v) / air;
   monkey.flightSpeed = spd;
@@ -248,9 +250,10 @@ function monkeyRect() {
 }
 
 function treeHitRange(t) {
+  // Extra-wide safe zone so edge taps still count
   return {
-    left: t.x - t.canopyW / 2 - 4,
-    right: t.x + t.canopyW / 2 + 4,
+    left: t.x - t.canopyW / 2 - 10,
+    right: t.x + t.canopyW / 2 + 10,
   };
 }
 
@@ -307,7 +310,8 @@ function tryLandOnTarget() {
   }
 
   const dx = t.x - monkey.x;
-  if (dx < -CATCH_X - 12) {
+  // Stay forgiving a bit longer after the tree center passes
+  if (dx < -CATCH_X - 22) {
     monkey.targetId = null;
     monkey.assuredJump = false;
     monkey.flightSpeed = 0;
@@ -316,9 +320,9 @@ function tryLandOnTarget() {
 
   const py = t.platformY;
   const nearBranch =
-    monkey.airTime > 0.08 &&
-    monkey.y >= py - 14 &&
-    monkey.y <= py + 16;
+    monkey.airTime > 0.05 &&
+    monkey.y >= py - 22 &&
+    monkey.y <= py + 22;
 
   if (nearBranch && Math.abs(dx) <= CATCH_X) {
     attachTo(t.id);
