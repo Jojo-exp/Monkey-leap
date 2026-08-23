@@ -15,16 +15,16 @@ body {
   overflow: hidden;
 }
 
+/* Desktop / laptop — original size and boxed look */
 #wrap {
   min-height: 100%;
-  min-height: 100dvh;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 12px;
+  gap: 12px;
+  padding: 16px;
   cursor: pointer;
 }
 
@@ -49,9 +49,10 @@ body {
   padding: 0 12px;
 }
 
-/* Phone: fill the screen — bigger play area, less “tiny box” */
+/* Phone only — bigger play area, tap-friendly full screen */
 @media (max-width: 800px), (hover: none) and (pointer: coarse) {
   #wrap {
+    min-height: 100dvh;
     padding: 0;
     gap: 0;
     justify-content: stretch;
@@ -61,10 +62,9 @@ body {
   #game {
     width: 100vw;
     max-width: 100%;
-    /* Use most of the phone height; keep aspect without a small inset box */
     height: auto;
     max-height: calc(100dvh - 28px);
-    min-height: min(72dvh, calc(100vw * 400 / 480));
+    min-height: min(72dvh, calc(100vw * 270 / 480));
     border: none;
     border-radius: 0;
     flex: 1 1 auto;

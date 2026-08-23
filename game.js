@@ -12,9 +12,9 @@ const ctx = canvas.getContext("2d");
 const W = canvas.width;
 const H = canvas.height;
 
-/** Default / cliff platform height (taller canvas for phones) */
-const PLATFORM_Y = 250;
-const WATER_Y = 330;
+/** Default / cliff platform height */
+const PLATFORM_Y = 168;
+const WATER_Y = 220;
 const CLIFF_EDGE_START = 108;
 let cliffEdge = CLIFF_EDGE_START;
 
@@ -152,10 +152,10 @@ function startRunAndJump() {
 function pickPlatformY(forceTall) {
   if (forceTall) {
     // Tall tree — banana lives up here (needs a higher hop)
-    return 200 + Math.floor(Math.random() * 10); // ~200–209
+    return 128 + Math.floor(Math.random() * 8); // ~128–135
   }
-  // Normal variety around cliff height
-  const choices = [235, 250, 250, 265, 220, 280];
+  // Normal variety: a bit lower / same / a bit higher than cliff
+  const choices = [158, 168, 168, 178, 148, 188];
   return choices[Math.floor(Math.random() * choices.length)];
 }
 
