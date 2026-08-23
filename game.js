@@ -465,21 +465,7 @@ function update(dt) {
         f.cooldown = 1 + Math.random() * 1.5;
         f.cooldown *= Math.max(0.45, 1 - state.score / 400);
       }
-
-      const m = monkeyRect();
-      const fw = 14;
-      const fh = 10 + f.bite * 4;
-      const fx = f.x - fw / 2;
-      const fy = f.y - fh;
-      if (
-        m.x < fx + fw &&
-        m.x + m.w > fx &&
-        m.y < fy + fh &&
-        m.y + m.h > fy
-      ) {
-        die();
-        return;
-      }
+      // Fish are visual only — no collision kill
     }
   }
 }
