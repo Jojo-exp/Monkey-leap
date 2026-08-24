@@ -84,11 +84,11 @@ function currentGap() {
 }
 
 function currentSpeed() {
-  // Smooth but snappy — close to the old fun pace, without sudden jumps
-  const base = 88;
-  const gradual = state.pace * 6.2; // ~10s → ~150, ~15s → ~180 (then soft cap)
-  const bananaNudge = state.bananas * 2; // tiny only — no +20 score spike
-  return Math.min(195, base + gradual + bananaNudge);
+  // Smooth but fast — much closer to the old fun pace, no sudden spikes
+  const base = 95;
+  const gradual = state.pace * 10; // picks up quickly while staying continuous
+  const bananaNudge = state.bananas * 2;
+  return Math.min(210, base + gradual + bananaNudge);
 }
 
 function holdPlatformY() {
