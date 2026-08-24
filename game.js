@@ -28,8 +28,6 @@ const state = {
   best: Number(localStorage.getItem("monkeyLeapBest") || 0),
   speed: 0,
   time: 0,
-  /** Seconds spent running — used for smooth speed (not banana score spikes) */
-  pace: 0,
   treesSpawned: 0,
   treesLanded: 0,
   bananas: 0,
@@ -79,16 +77,11 @@ const BANANA_POINTS = 20;
 let nextTreeId = 1;
 
 function currentGap() {
-  // Gradual with playtime — not score (bananas would spike gaps)
-  return 100 + Math.min(18, state.pace * 1.1);
+  return 100 + Math.min(18, Math.floor(state.score / 20) * 6);
 }
 
 function currentSpeed() {
-  // Smooth but fast — much closer to the old fun pace, no sudden spikes
-  const base = 95;
-  const gradual = state.pace * 10; // picks up quickly while staying continuous
-  const bananaNudge = state.bananas * 2;
-  return Math.min(210, base + gradual + bananaNudge);
+  return 82 + Math.floor(state.score / 10) * 11;
 }
 
 function holdPlatformY() {
@@ -119,7 +112,6 @@ function setupWaitingWorld() {
   state.score = 0;
   state.speed = 0;
   state.time = 0;
-  state.pace = 0;
   state.treesSpawned = 0;
   state.treesLanded = 0;
   state.bananas = 0;
@@ -395,7 +387,6 @@ function update(dt) {
   if (state.mode !== "running") return;
 
   state.score += dt * 10;
-  state.pace += dt;
 
   if (!monkey.grounded && monkey.assuredJump && monkey.flightSpeed > 0) {
     state.speed = monkey.flightSpeed;
