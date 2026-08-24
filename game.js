@@ -80,16 +80,15 @@ let nextTreeId = 1;
 
 function currentGap() {
   // Gradual with playtime — not score (bananas would spike gaps)
-  return 100 + Math.min(18, state.pace * 0.4);
+  return 100 + Math.min(18, state.pace * 1.1);
 }
 
 function currentSpeed() {
-  // Smooth climb from playtime — no sudden tier jumps, no banana +20 score spike
-  const base = 84;
-  const gradual = state.pace * 1.15; // steady increase while playing
-  const bananaNudge = state.bananas * 2.5; // tiny permanent bump per banana
-  const bananaRamp = state.bananas * state.pace * 0.05; // after bananas, climbs a hair faster
-  return Math.min(185, base + gradual + bananaNudge + bananaRamp);
+  // Smooth but snappy — close to the old fun pace, without sudden jumps
+  const base = 88;
+  const gradual = state.pace * 6.2; // ~10s → ~150, ~15s → ~180 (then soft cap)
+  const bananaNudge = state.bananas * 2; // tiny only — no +20 score spike
+  return Math.min(195, base + gradual + bananaNudge);
 }
 
 function holdPlatformY() {
