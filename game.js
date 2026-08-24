@@ -153,11 +153,12 @@ function startRunAndJump() {
 
 function pickPlatformY(forceTall) {
   if (forceTall) {
-    // Tall tree — banana lives up here (needs a higher hop)
-    return 128 + Math.floor(Math.random() * 8); // ~128–135
+    // Banana tree: clearly taller, but still reachable (not extreme)
+    return 150 + Math.floor(Math.random() * 6); // ~150–155
   }
-  // Normal variety: a bit lower / same / a bit higher than cliff
-  const choices = [158, 168, 168, 178, 148, 188];
+  // Neutral range around the cliff — no near-water shorts, no huge peaks
+  // cliff = 168; short max ~176; tall min ~158
+  const choices = [158, 162, 168, 168, 172, 176];
   return choices[Math.floor(Math.random() * choices.length)];
 }
 
